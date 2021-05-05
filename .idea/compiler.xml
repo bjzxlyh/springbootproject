@@ -8,17 +8,20 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="springbootproject" />
+        <module name="jxc-code-generator" />
         <module name="jxc-admin" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="jxc-admin" target="1.8" />
+      <module name="jxc-code-generator" target="1.8" />
       <module name="springbootproject" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="jxc-admin" options="-parameters" />
+      <module name="jxc-code-generator" options="-parameters" />
       <module name="springbootproject" options="-parameters" />
     </option>
   </component>
