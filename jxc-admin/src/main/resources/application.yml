@@ -6,7 +6,7 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/mybatis?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/shanghai
+    url: jdbc:mysql://localhost:3306/project?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF-8
     username: root
     password: Lyh46023424!
     hikari:
@@ -26,10 +26,10 @@ spring:
       #测试连接是否可用的查询语句
       connection-test-query: SELECT 1
   freemarker:
-    suffix: .html
+    suffix: .ftl
     content-type: text/html
     charset: UTF-8
-    template-loader-path: classpath:/static/
+    template-loader-path: classpath:/views/
     request-context-attribute: ctx
     settings:
       number_format: 0.##
