@@ -5,6 +5,7 @@ package com.lyh.admin.utils;
  * @author mage
  *
  */
+@SuppressWarnings("all")
 public class StringUtil {
 
 	/**
