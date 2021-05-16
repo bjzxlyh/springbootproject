@@ -41,17 +41,17 @@ public class TUserController {
     @ResponseBody
     public RespBean login(String username, String password, HttpSession session){
 
-        try {
+        //try {
             TUser user = userService.login(username,password);
             session.setAttribute("user",user);
             return RespBean.success("用户登录成功");
-        } catch (ParamsException e) {
-            e.printStackTrace();
-            return RespBean.error(e.getMsg());
-        }catch (Exception e){
-            e.printStackTrace();
-            return  RespBean.error("用户登录失败！");
-        }
+//        } catch (ParamsException e) {
+//            e.printStackTrace();
+//            return RespBean.error(e.getMsg());
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            return  RespBean.error("用户登录失败！");
+//        }
 
     }
 
@@ -74,16 +74,16 @@ public class TUserController {
     @RequestMapping("updateUserInfo")
     @ResponseBody
     public RespBean updateUserInfo(TUser user){
-        try {
+        //try {
             userService.updateUserInfo(user);
             return RespBean.success("用户信息更新成功!");
-        } catch (ParamsException e) {
-            e.printStackTrace();
-            return RespBean.error(e.getMsg());
-        }catch (Exception e){
-            e.printStackTrace();
-            return  RespBean.error("用户信息更新失败！");
-        }
+//        } catch (ParamsException e) {
+//            e.printStackTrace();
+//            return RespBean.error(e.getMsg());
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            return  RespBean.error("用户信息更新失败！");
+//        }
     }
 
     /**
@@ -106,16 +106,16 @@ public class TUserController {
      @RequestMapping("updateUserPassword")
      @ResponseBody
      public RespBean updateUserPassword(HttpSession session,String oldPassword,String newPassword,String confirmPassword){
-         try {
+         //try {
              TUser user =(TUser) session.getAttribute("user");
              userService.updateUserPassword(user.getUserName(),oldPassword,newPassword,confirmPassword);
              return RespBean.success("密码修改成功!");
-         } catch (ParamsException e) {
-             e.printStackTrace();
-             return RespBean.error(e.getMsg());
-         }catch (Exception e){
-             e.printStackTrace();
-             return  RespBean.error("密码修改失败！");
-         }
+//         } catch (ParamsException e) {
+//             e.printStackTrace();
+//             return RespBean.error(e.getMsg());
+//         }catch (Exception e){
+//             e.printStackTrace();
+//             return  RespBean.error("密码修改失败！");
+//         }
      }
 }
