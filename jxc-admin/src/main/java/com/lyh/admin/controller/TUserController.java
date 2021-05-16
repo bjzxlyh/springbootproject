@@ -30,6 +30,13 @@ public class TUserController {
     @Resource
     private ITUserService userService;
 
+    /**
+     * 登录界面
+     * @param username
+     * @param password
+     * @param session
+     * @return
+     */
     @RequestMapping("login")
     @ResponseBody
     public RespBean login(String username, String password, HttpSession session){
@@ -79,4 +86,36 @@ public class TUserController {
         }
     }
 
+    /**
+     * 密码修改更新页
+     * @return
+     */
+    @RequestMapping("toPasswordPage")
+    public String password(){
+        return "user/password";
+    }
+
+    /**
+     * 用户密码更新
+     * @param session
+     * @param oldPassword
+     * @param newPassword
+     * @param confirmPassword
+     * @return
+     */
+     @RequestMapping("updateUserPassword")
+     @ResponseBody
+     public RespBean updateUserPassword(HttpSession session,String oldPassword,String newPassword,String confirmPassword){
+         try {
+             TUser user =(TUser) session.getAttribute("user");
+             userService.updateUserPassword(user.getUserName(),oldPassword,newPassword,confirmPassword);
+             return RespBean.success("密码修改成功!");
+         } catch (ParamsException e) {
+             e.printStackTrace();
+             return RespBean.error(e.getMsg());
+         }catch (Exception e){
+             e.printStackTrace();
+             return  RespBean.error("密码修改失败！");
+         }
+     }
 }
