@@ -22,8 +22,7 @@ public interface ITUserService extends IService<TUser> {
      * @param session
      * @return
      */
-
-
+//    TUser login(String username, String password);
     TUser login(String username, String password);
 
     /**
@@ -33,6 +32,8 @@ public interface ITUserService extends IService<TUser> {
      */
     public TUser findTUserByUserName(String username);
 
+    public void updateUserInfo(TUser user);
 
-
+    void updateUserPassword(String userName, String oldPassword, String newPassword, String confirmPassword);
 }
+

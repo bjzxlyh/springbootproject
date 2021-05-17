@@ -55,8 +55,8 @@ public class TUserServiceImpl extends ServiceImpl<TUserMapper, TUser> implements
     @Override
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     public void updateUserInfo(TUser user) {
-        AssertUtil.isTrue(StringUtil.isEmpty(user.getUserName()),"用户名不为空!");
-        TUser temp = this.findTUserByUserName(user.getUserName());
+        AssertUtil.isTrue(StringUtil.isEmpty(user.getUsername()),"用户名不为空!");
+        TUser temp = this.findTUserByUserName(user.getUsername());
         AssertUtil.isTrue(null != temp && !(temp.getId().equals(user.getId())),"用户名已存在!");
         AssertUtil.isTrue(!(this.updateById(user)),"用户信息更新失败！");
 

@@ -1,6 +1,7 @@
 package com.lyh.admin.controller;
 
 
+import com.fasterxml.jackson.databind.Module;
 import com.lyh.admin.exceptions.ParamsException;
 import com.lyh.admin.model.RespBean;
 import com.lyh.admin.pojo.TUser;
@@ -37,23 +38,23 @@ public class TUserController {
      * @param session
      * @return
      */
-    @RequestMapping("login")
-    @ResponseBody
-    public RespBean login(String username, String password, HttpSession session){
-
-        //try {
-            TUser user = userService.login(username,password);
-            session.setAttribute("user",user);
-            return RespBean.success("用户登录成功");
-//        } catch (ParamsException e) {
-//            e.printStackTrace();
-//            return RespBean.error(e.getMsg());
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            return  RespBean.error("用户登录失败！");
-//        }
-
-    }
+//    @RequestMapping("login")
+//    @ResponseBody
+//    public RespBean login(String username, String password, HttpSession session){
+//
+//        //try {
+//            TUser user = userService.login(username,password);
+//            session.setAttribute("user",user);
+//            return RespBean.success("用户登录成功");
+////        } catch (ParamsException e) {
+////            e.printStackTrace();
+////            return RespBean.error(e.getMsg());
+////        }catch (Exception e){
+////            e.printStackTrace();
+////            return  RespBean.error("用户登录失败！");
+////        }
+//
+//    }
 
     /**
      * 用户信息设置页面
@@ -108,7 +109,7 @@ public class TUserController {
      public RespBean updateUserPassword(HttpSession session,String oldPassword,String newPassword,String confirmPassword){
          //try {
              TUser user =(TUser) session.getAttribute("user");
-             userService.updateUserPassword(user.getUserName(),oldPassword,newPassword,confirmPassword);
+             userService.updateUserPassword(user.getUsername(),oldPassword,newPassword,confirmPassword);
              return RespBean.success("密码修改成功!");
 //         } catch (ParamsException e) {
 //             e.printStackTrace();

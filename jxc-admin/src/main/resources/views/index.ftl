@@ -55,7 +55,7 @@
 <div class="main-body">
     <div class="login-main">
         <div class="login-top">
-            <span>进销存系统登录</span>
+            <span>李毅恒的小系统</span>
             <span class="bg1"></span>
             <span class="bg2"></span>
         </div>
@@ -90,7 +90,7 @@
     </div>
 </div>
 <div class="footer">
-    上海乐字节教育科技有限公司 ICP认证：沪ICP备19046588号<span class="padding-5">|</span>Copyright@2019乐字节 All Rights Reserved
+    李毅恒的小系统<span class="padding-5">|</span>练手小项目
 </div>
 
 <script src="${ctx.contextPath}/js/index.js" charset="utf-8"></script>

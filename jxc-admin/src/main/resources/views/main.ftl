@@ -11,7 +11,7 @@
         <div class="layui-logo" align="left">
             <a href="" >
                 <img src="images/logo.png" alt="logo" >
-                <h1 style="margin: 0 0 0 3px">进销存管理系统</h1>
+                <h1 style="margin: 0 0 0 3px">李毅恒的小系统</h1>
             </a>
         </div>
         <a>
@@ -22,13 +22,15 @@
                 <a href="javascript:;" data-check-screen="full"><i class="fa fa-arrows-alt"></i></a>
             </li>
             <li class="layui-nav-item layuimini-setting">
-                <a href="javascript:;">admin</a>
+                <a href="javascript:;">${(Session.SPRING_SECURITY_CONTEXT.authentication.principal.username)!'lyh'}</a>
                 <dl class="layui-nav-child">
                     <dd>
-                        <a href="javascript:;" data-iframe-tab="${ctx.contextPath}/user/setting" data-title="基本资料" data-icon="fa fa-gears">基本资料</a>
+<#--                        <form action="${ctx.contextPath}/user/setting" method="">-->
+                        <a href="javascript:;" data-iframe-tab="${ctx.contextPath}/t-user/setting" data-title="基本资料" data-icon="fa fa-gears">基本资料</a>
+<#--                        </form>-->
                     </dd>
                     <dd>
-                        <a href="javascript:;" data-iframe-tab="${ctx.contextPath}/user/toPasswordPage" data-title="修改密码" data-icon="fa fa-gears">修改密码</a>
+                        <a href="javascript:;" data-iframe-tab="${ctx.contextPath}/t-user/toPasswordPage" data-title="修改密码" data-icon="fa fa-gears">修改密码</a>
                     </dd>
                     <dd>
                         <a href="${ctx.contextPath}/signout" class="login-out">退出登录</a>

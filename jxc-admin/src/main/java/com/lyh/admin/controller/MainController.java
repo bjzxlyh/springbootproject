@@ -3,6 +3,8 @@ package com.lyh.admin.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 public class MainController {
 
@@ -28,5 +30,11 @@ public class MainController {
     @RequestMapping("welcome")
     public String welcome(){
         return "welcome";
+    }
+
+    @RequestMapping("signout")
+    public String signout(HttpSession session){
+        session.removeAttribute("user");
+        return "redirect:index";
     }
 }
