@@ -7,12 +7,14 @@ import com.lyh.admin.model.RespBean;
 import com.lyh.admin.pojo.TUser;
 import com.lyh.admin.service.ITUserService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.security.Principal;
 
 
 /**
@@ -61,9 +63,9 @@ public class TUserController {
      * @return
      */
     @RequestMapping("setting")
-    public String setting(HttpSession session){
-        TUser user =(TUser) session.getAttribute("user");
-        session.setAttribute("user",userService.getById(user.getId()));
+    public String setting(Principal principal, Model model){
+        TUser user =userService.findTUserByUserName(principal.getName());
+        model.addAttribute("user",user);
         return "user/setting";
     }
 
@@ -98,7 +100,7 @@ public class TUserController {
 
     /**
      * 用户密码更新
-     * @param session
+     * @param principal
      * @param oldPassword
      * @param newPassword
      * @param confirmPassword
@@ -106,10 +108,9 @@ public class TUserController {
      */
      @RequestMapping("updateUserPassword")
      @ResponseBody
-     public RespBean updateUserPassword(HttpSession session,String oldPassword,String newPassword,String confirmPassword){
+     public RespBean updateUserPassword(Principal principal, String oldPassword, String newPassword, String confirmPassword){
          //try {
-             TUser user =(TUser) session.getAttribute("user");
-             userService.updateUserPassword(user.getUsername(),oldPassword,newPassword,confirmPassword);
+             userService.updateUserPassword(principal.getName(),oldPassword,newPassword,confirmPassword);
              return RespBean.success("密码修改成功!");
 //         } catch (ParamsException e) {
 //             e.printStackTrace();

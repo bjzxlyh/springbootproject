@@ -7,9 +7,12 @@ import com.lyh.admin.service.ITUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lyh.admin.utils.AssertUtil;
 import com.lyh.admin.utils.StringUtil;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
 
 /**
  * <p>
@@ -22,21 +25,24 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class TUserServiceImpl extends ServiceImpl<TUserMapper, TUser> implements ITUserService {
 
+    @Resource
+    private PasswordEncoder passwordEncoder;
+
     /**
      * 登录
      * @param username
      * @param password
      * @return
      */
-    @Override
-    public TUser login(String username, String password) {
-        AssertUtil.isTrue(StringUtil.isEmpty(username),"用户名不能为空!");
-        AssertUtil.isTrue(StringUtil.isEmpty(password),"密码不能为空!");
-        TUser Tuser = this.findTUserByUserName(username);
-        AssertUtil.isTrue(null==Tuser,"该用户记录不存在或已注销！");
-        AssertUtil.isTrue(!(Tuser.getPassword().equals(password)),"密码错误！");
-        return Tuser;
-    }
+//    @Override
+//    public TUser login(String username, String password) {
+//        AssertUtil.isTrue(StringUtil.isEmpty(username),"用户名不能为空!");
+//        AssertUtil.isTrue(StringUtil.isEmpty(password),"密码不能为空!");
+//        TUser Tuser = this.findTUserByUserName(username);
+//        AssertUtil.isTrue(null==Tuser,"该用户记录不存在或已注销！");
+//        AssertUtil.isTrue(!(Tuser.getPassword().equals(password)),"密码错误！");
+//        return Tuser;
+//    }
 
     /**
      * findTUserByUserName
@@ -78,10 +84,10 @@ public class TUserServiceImpl extends ServiceImpl<TUserMapper, TUser> implements
         AssertUtil.isTrue(StringUtil.isEmpty(oldPassword),"请输入原始密码!");
         AssertUtil.isTrue(StringUtil.isEmpty(newPassword),"请输入新密码!");
         AssertUtil.isTrue(StringUtil.isEmpty(confirmPassword),"请输入确认密码!");
-        AssertUtil.isTrue(!(user.getPassword().equals(oldPassword)),"原始密码输入错误!");
+        AssertUtil.isTrue(!(passwordEncoder.matches(oldPassword,user.getPassword())),"原始密码输入错误!");
         AssertUtil.isTrue(!(newPassword.equals(confirmPassword)),"密码输入不一致!");
         AssertUtil.isTrue(newPassword.equals(oldPassword),"新密码与原密码不能一致!");
-        user.setPassword(newPassword);
+        user.setPassword(passwordEncoder.encode(newPassword));
         AssertUtil.isTrue(!(this.updateById(user)),"用户密码更新失败!");
     }
 }

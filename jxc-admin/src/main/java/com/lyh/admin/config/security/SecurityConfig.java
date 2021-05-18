@@ -1,5 +1,6 @@
 package com.lyh.admin.config.security;
 
+import com.lyh.admin.filters.CaptchaCodeFilter;
 import com.lyh.admin.pojo.TUser;
 import com.lyh.admin.service.ITUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.annotation.Resource;
 
@@ -29,8 +31,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private JxcAuthenticationFailedHandler jxcAuthenticationFailedHandler;
     @Autowired
     private JxcAuthenticationSuccessHandler jxcAuthenticationSuccessHandler;
+    @Autowired
+    private JxcLogoutSuccessHandler jxcLogoutSuccessHandler;
     @Resource
     private ITUserService userService;
+
+    @Resource
+    private CaptchaCodeFilter captchaCodeFilter;
     /**
      * 放行静态资源
      * @param web
@@ -42,10 +49,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
+    /**
+     * 配置登录退出界面
+     * @param http
+     * @throws Exception
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception{
         //禁用csf
         http.csrf().disable()
+                .addFilterBefore(captchaCodeFilter, UsernamePasswordAuthenticationFilter.class)
                 //允许frame页面嵌套
                 .headers().frameOptions().disable()
                 .and()
@@ -57,7 +70,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .successHandler(jxcAuthenticationSuccessHandler)
                     .failureHandler(jxcAuthenticationFailedHandler)
                 .and()
-                    .authorizeRequests().antMatchers("/index","login").permitAll()
+                    .logout()
+                    .logoutUrl("/signout")
+                    .deleteCookies("JSESSIONID")
+                    .logoutSuccessHandler(jxcLogoutSuccessHandler)
+                .and()
+                    .authorizeRequests().antMatchers("/index","login","/image").permitAll()
                     .anyRequest().authenticated();
     }
 
