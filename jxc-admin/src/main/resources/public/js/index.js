@@ -33,7 +33,7 @@ layui.use(['form','jquery','jquery_cookie'], function () {
                 username:data.username,
                 password:data.password,
                  captchaCode:data.captcha,
-                 //rememberMe:$("#rememberMe").is(":checked")
+                 rememberMe:$("#rememberMe").is(":checked")
             },
             dataType:"json",
             success:function (data) {
