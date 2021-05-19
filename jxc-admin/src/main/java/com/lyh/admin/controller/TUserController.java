@@ -137,4 +137,19 @@ public class TUserController {
      public Map<String,Object> userList(UserQuery userQuery){
          return userService.userList(userQuery);
      }
+
+    /**
+     * 添加|更新用户页面
+     * @param id
+     * @param model
+     * @return
+     */
+     @RequestMapping("addOrUpdateUserPage")
+     public String addOrUpdatePage(Integer id,Model model){
+         if(null != id){
+             model.addAttribute("user",userService.getById(id));
+         }
+         return "user/add_update";
+   }
+
 }
