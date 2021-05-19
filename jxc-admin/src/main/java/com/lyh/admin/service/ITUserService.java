@@ -2,8 +2,10 @@ package com.lyh.admin.service;
 
 import com.lyh.admin.pojo.TUser;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.lyh.admin.query.UserQuery;
 
 import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 /**
  * <p>
@@ -35,5 +37,7 @@ public interface ITUserService extends IService<TUser> {
     public void updateUserInfo(TUser user);
 
     void updateUserPassword(String userName, String oldPassword, String newPassword, String confirmPassword);
+
+    Map<String, Object> userList(UserQuery userQuery);
 }
 

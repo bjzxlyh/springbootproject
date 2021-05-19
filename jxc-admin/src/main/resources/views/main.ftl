@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>进销存管理系统</title>
+    <title>李毅恒练手小项目</title>
     <#include "common.ftl">
 </head>
 <body class="layui-layout-body layuimini-all">
@@ -26,11 +26,11 @@
                 <dl class="layui-nav-child">
                     <dd>
 <#--                        <form action="${ctx.contextPath}/user/setting" method="">-->
-                        <a href="javascript:;" data-iframe-tab="${ctx.contextPath}/t-user/setting" data-title="基本资料" data-icon="fa fa-gears">基本资料</a>
+                        <a href="javascript:;" data-iframe-tab="${ctx.contextPath}/user/setting" data-title="基本资料" data-icon="fa fa-gears">基本资料</a>
 <#--                        </form>-->
                     </dd>
                     <dd>
-                        <a href="javascript:;" data-iframe-tab="${ctx.contextPath}/t-user/toPasswordPage" data-title="修改密码" data-icon="fa fa-gears">修改密码</a>
+                        <a href="javascript:;" data-iframe-tab="${ctx.contextPath}/user/toPasswordPage" data-title="修改密码" data-icon="fa fa-gears">修改密码</a>
                     </dd>
                     <dd>
                         <a href="${ctx.contextPath}/signout" class="login-out">退出登录</a>

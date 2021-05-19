@@ -8,7 +8,7 @@ layui.use(['form','layuimini','jquery','jquery_cookie'], function () {
     form.on('submit(saveBtn)', function (data) {
         $.ajax({
             type:"post",
-            url:ctx+"/t-user/updateUserPassword",
+            url:ctx+"/user/updateUserPassword",
             data:{
                 oldPassword:data.field.old_password,
                 newPassword:data.field.new_password,

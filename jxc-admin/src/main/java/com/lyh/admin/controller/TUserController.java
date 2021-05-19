@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.Module;
 import com.lyh.admin.exceptions.ParamsException;
 import com.lyh.admin.model.RespBean;
 import com.lyh.admin.pojo.TUser;
+import com.lyh.admin.query.UserQuery;
 import com.lyh.admin.service.ITUserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,8 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpSession;
+
 import java.security.Principal;
+import java.util.Map;
 
 
 /**
@@ -26,7 +28,7 @@ import java.security.Principal;
  * @since 2021-05-10
  */
 
-@RequestMapping("/t-user")
+@RequestMapping("/user")
 @Controller
 public class TUserController {
 
@@ -119,5 +121,20 @@ public class TUserController {
 //             e.printStackTrace();
 //             return  RespBean.error("密码修改失败！");
 //         }
+     }
+
+    /**
+     * 用户管理主页
+     * @return
+     */
+     @RequestMapping("index")
+     public String index(){
+         return "user/user";
+     }
+
+    @RequestMapping("list")
+    @ResponseBody
+     public Map<String,Object> userList(UserQuery userQuery){
+         return userService.userList(userQuery);
      }
 }

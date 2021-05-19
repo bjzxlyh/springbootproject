@@ -1,18 +1,23 @@
 package com.lyh.admin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lyh.admin.pojo.TUser;
 import com.lyh.admin.mapper.TUserMapper;
+import com.lyh.admin.query.UserQuery;
 import com.lyh.admin.service.ITUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lyh.admin.utils.AssertUtil;
 import com.lyh.admin.utils.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <p>
@@ -89,5 +94,22 @@ public class TUserServiceImpl extends ServiceImpl<TUserMapper, TUser> implements
         AssertUtil.isTrue(newPassword.equals(oldPassword),"新密码与原密码不能一致!");
         user.setPassword(passwordEncoder.encode(newPassword));
         AssertUtil.isTrue(!(this.updateById(user)),"用户密码更新失败!");
+    }
+
+    @Override
+    public Map<String, Object> userList(UserQuery userQuery) {
+        Page<TUser> page = new Page<TUser>(userQuery.getPage(), userQuery.getLimit());
+        QueryWrapper<TUser> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("is_del",0);
+        if(StringUtils.isNotBlank(userQuery.getUserName())){
+            queryWrapper.like("user_name",userQuery.getUserName());
+        }
+        Page<TUser> page1 = this.baseMapper.selectPage(page, queryWrapper);
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("code",0);
+        map.put("msg","");
+        map.put("data",page1.getRecords());
+        map.put("count",page1.getTotal());
+        return map;
     }
 }

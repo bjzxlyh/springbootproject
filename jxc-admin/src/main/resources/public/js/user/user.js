@@ -5,7 +5,7 @@ layui.use(['table','layer',"form"],function(){
     //用户列表展示
     var  tableIns = table.render({
         elem: '#userList',
-        url : ctx+'/user/list',
+        url:ctx+"/user/list",
         cellMinWidth : 95,
         page : true,
         height : "full-125",

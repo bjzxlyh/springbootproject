@@ -7,7 +7,7 @@ layui.use(['form','layuimini'], function () {
     form.on('submit(saveBtn)', function (data) {
         $.ajax({
             type:"post",
-            url:ctx+"/t-user/updateUserInfo",
+            url:ctx+"/user/updateUserInfo",
             data:data.field,
             dataType:"json",
             success:function (data) {
