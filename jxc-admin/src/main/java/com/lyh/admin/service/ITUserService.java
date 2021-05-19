@@ -39,5 +39,9 @@ public interface ITUserService extends IService<TUser> {
     void updateUserPassword(String userName, String oldPassword, String newPassword, String confirmPassword);
 
     Map<String, Object> userList(UserQuery userQuery);
+
+    void saveUser(TUser user);
+
+    void updateUser(TUser user);
 }
 

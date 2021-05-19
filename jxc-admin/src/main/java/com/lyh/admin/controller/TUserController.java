@@ -152,4 +152,31 @@ public class TUserController {
          return "user/add_update";
    }
 
+    /**
+     * 用户信息添加接口
+     * @param user
+     * @return
+     */
+   @RequestMapping("save")
+   @ResponseBody
+   public RespBean saveUser(TUser user){
+         userService.saveUser(user);
+         return RespBean.success("用户信息添加成功!");
+   }
+
+    /**
+     * 用户信息更新接口
+     * @param user
+     * @return
+     */
+    @RequestMapping("update")
+    @ResponseBody
+    public RespBean updateUser(TUser user){
+        userService.updateUser(user);
+        return RespBean.success("用户记录更新成功!");
+    }
+
+
+
+
 }

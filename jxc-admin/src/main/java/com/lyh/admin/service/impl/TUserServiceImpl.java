@@ -119,4 +119,36 @@ public class TUserServiceImpl extends ServiceImpl<TUserMapper, TUser> implements
         map.put("count",page.getTotal());
         return map;
     }
+
+    /**
+     * 用户添加操作
+     * @param user
+     */
+    @Override
+    public void saveUser(TUser user) {
+        /**
+         * 用户名
+         *    非空  不可重复
+         * 用户密码默认设置123456,后续自己改
+         * 用户默认有效
+         */
+
+        AssertUtil.isTrue(StringUtils.isBlank(user.getUsername()),"用户名不能为空！");
+        AssertUtil.isTrue(null != this.findTUserByUserName(user.getUsername()),"用户名已存在！");
+        user.setPassword(passwordEncoder.encode("123456"));
+        user.setIsDel(0);
+        AssertUtil.isTrue(!(this.save(user)),"用户信息添加失败!");
+    }
+
+    /**
+     * 用户更新操作
+     * @param user
+     */
+    @Override
+    public void updateUser(TUser user) {
+        AssertUtil.isTrue(StringUtils.isBlank(user.getUsername()),"用户名不能为空！");
+        TUser temp = this.findTUserByUserName(user.getUsername());
+        AssertUtil.isTrue(null != temp && !(temp.getId().equals(user.getId())),"用户名已存在！");
+        AssertUtil.isTrue(!(this.updateById(user)),"用户信息更新成功！");
+    }
 }
