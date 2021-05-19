@@ -9,6 +9,7 @@ import com.lyh.admin.query.UserQuery;
 import com.lyh.admin.service.ITUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lyh.admin.utils.AssertUtil;
+import com.lyh.admin.utils.PageResultUtil;
 import com.lyh.admin.utils.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -113,12 +114,7 @@ public class TUserServiceImpl extends ServiceImpl<TUserMapper, TUser> implements
         }
 
         page = this.baseMapper.selectPage(page,queryWrapper);
-        Map<String,Object> map = new HashMap<String,Object>();
-        map.put("code",0);
-        map.put("msg","");
-        map.put("data",page.getRecords());
-        map.put("count",page.getTotal());
-        return map;
+        return PageResultUtil.getResult(page.getTotal(),page.getRecords());
     }
 
     /**

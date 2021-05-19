@@ -5,13 +5,13 @@ layui.use(['form', 'layer','formSelects'], function () {
         formSelects = layui.formSelects;
 
 
-    // var userId=$("input[name='id']").val();
-    // formSelects.config('selectId',{
-    //     type:"post",
-    //     searchUrl:ctx+"/role/queryAllRoles?userId="+userId,
-    //     keyName: 'roleName',            //自定义返回数据中name的key, 默认 name
-    //     keyVal: 'id'            //自定义返回数据中value的key, 默认 value
-    // },true);
+    var userId=$("input[name='id']").val();
+    formSelects.config('selectId',{
+        type:"post",
+        searchUrl:ctx+"/role/queryAllRoles?userId="+userId,
+        keyName: 'roleName',            //自定义返回数据中name的key, 默认 name
+        keyVal: 'id'            //自定义返回数据中value的key, 默认 value
+    },true);
 
 
 
