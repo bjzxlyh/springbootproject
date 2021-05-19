@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -125,6 +126,7 @@ public class TUserServiceImpl extends ServiceImpl<TUserMapper, TUser> implements
      * @param user
      */
     @Override
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     public void saveUser(TUser user) {
         /**
          * 用户名
@@ -145,10 +147,28 @@ public class TUserServiceImpl extends ServiceImpl<TUserMapper, TUser> implements
      * @param user
      */
     @Override
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     public void updateUser(TUser user) {
         AssertUtil.isTrue(StringUtils.isBlank(user.getUsername()),"用户名不能为空！");
         TUser temp = this.findTUserByUserName(user.getUsername());
         AssertUtil.isTrue(null != temp && !(temp.getId().equals(user.getId())),"用户名已存在！");
         AssertUtil.isTrue(!(this.updateById(user)),"用户信息更新成功！");
+    }
+
+    /**
+     * 用户删除操作
+     * @param ids
+     */
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
+    public void deleteUser(Integer[] ids) {
+        AssertUtil.isTrue(null == ids || ids.length == 0,"请选择待删除的记录id!");
+        ArrayList<TUser> users = new ArrayList<>();
+        for (Integer id : ids) {
+            TUser temp = this.getById(id);
+            temp.setIsDel(1);
+            users.add(temp);
+        }
+        AssertUtil.isTrue(!(this.updateBatchById(users)),"用户记录删除失败！");
     }
 }

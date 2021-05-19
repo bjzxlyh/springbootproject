@@ -43,5 +43,8 @@ public interface ITUserService extends IService<TUser> {
     void saveUser(TUser user);
 
     void updateUser(TUser user);
+
+    void deleteUser(Integer[] ids);
+
 }
 

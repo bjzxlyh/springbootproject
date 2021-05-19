@@ -176,7 +176,17 @@ public class TUserController {
         return RespBean.success("用户记录更新成功!");
     }
 
-
+    /**
+     * 用户记录删除接口
+     * @param ids
+     * @return
+     */
+    @RequestMapping("delete")
+    @ResponseBody
+    public  RespBean deleteUser(Integer[] ids){
+        userService.deleteUser(ids);
+        return RespBean.success("用户信息删除成功！");
+    }
 
 
 }
