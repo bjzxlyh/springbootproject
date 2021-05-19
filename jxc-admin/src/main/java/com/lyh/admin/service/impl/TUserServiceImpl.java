@@ -1,6 +1,7 @@
 package com.lyh.admin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lyh.admin.pojo.TUser;
 import com.lyh.admin.mapper.TUserMapper;
@@ -96,20 +97,26 @@ public class TUserServiceImpl extends ServiceImpl<TUserMapper, TUser> implements
         AssertUtil.isTrue(!(this.updateById(user)),"用户密码更新失败!");
     }
 
+    /**
+     * 用户管理查询
+     * @param userQuery
+     * @return
+     */
     @Override
     public Map<String, Object> userList(UserQuery userQuery) {
-        Page<TUser> page = new Page<TUser>(userQuery.getPage(), userQuery.getLimit());
-        QueryWrapper<TUser> queryWrapper = new QueryWrapper<>();
+        IPage<TUser> page = new Page<TUser>(userQuery.getPage(),userQuery.getLimit());
+        QueryWrapper<TUser> queryWrapper = new QueryWrapper<TUser>();
         queryWrapper.eq("is_del",0);
         if(StringUtils.isNotBlank(userQuery.getUserName())){
             queryWrapper.like("user_name",userQuery.getUserName());
         }
-        Page<TUser> page1 = this.baseMapper.selectPage(page, queryWrapper);
+
+        page = this.baseMapper.selectPage(page,queryWrapper);
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("code",0);
         map.put("msg","");
-        map.put("data",page1.getRecords());
-        map.put("count",page1.getTotal());
+        map.put("data",page.getRecords());
+        map.put("count",page.getTotal());
         return map;
     }
 }
