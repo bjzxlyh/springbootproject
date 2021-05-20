@@ -16,7 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,6 +31,7 @@ import java.util.Map;
  */
 @Service
 public class TRoleServiceImpl extends ServiceImpl<TRoleMapper, TRole> implements ITRoleService {
+
 
     /**
      * 查找角色名
@@ -83,5 +86,20 @@ public class TRoleServiceImpl extends ServiceImpl<TRoleMapper, TRole> implements
         TRole temp = this.findRoleByRoleName(role.getName());
         AssertUtil.isTrue(null != temp && !(temp.getId().equals(role.getId())),"角色名已存在！");
         AssertUtil.isTrue(!(this.updateById(role)),"角色更新失败!");
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
+    public void deleteRole(Integer id) {
+        AssertUtil.isTrue(null == id,"请选择待删除的角色!");
+        TRole role = this.getById(id);
+        AssertUtil.isTrue(null == role,"待删除的角色不存在!");
+        role.setIsDel(1);
+        AssertUtil.isTrue(!(this.updateById(role)),"角色信息删除失败！");
+    }
+
+    @Override
+    public List<Map<String, Object>> queryAllRoles(Integer userId) {
+        return this.baseMapper.queryAllRoles(userId);
     }
 }

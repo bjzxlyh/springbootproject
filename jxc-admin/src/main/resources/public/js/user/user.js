@@ -47,9 +47,9 @@ layui.use(['table','layer',"form"],function(){
             case "del":
                 delUser(checkStatus.data);
                 break;
-            /*case "relationRole":
+            case "relationRole":
                 openRelationRoleDialog(checkStatus.data);
-                break;*/
+                break;
         };
     });
 

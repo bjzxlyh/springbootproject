@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.jws.WebParam;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -88,4 +90,27 @@ public class TRoleController {
         return RespBean.success("角色记录更新成功!");
     }
 
+    /**
+     * 用户记录删除接口
+     * @param ids
+     * @return
+     */
+    @RequestMapping("delete")
+    @ResponseBody
+    public  RespBean deleteRole(Integer id){
+        roleService.deleteRole(id);
+        return RespBean.success("角色信息删除成功！");
+    }
+
+    @RequestMapping("queryAllRoles")
+    @ResponseBody
+    public List<Map<String,Object>> queryAllRoles(Integer userId){
+        return roleService.queryAllRoles(userId);
+    }
+
+    @RequestMapping("toAddGrantPage")
+    public String toAddGrantPage(Integer roleId,Model model){
+        model.addAttribute("roleId",roleId);
+        return "role/grant";
+    }
 }

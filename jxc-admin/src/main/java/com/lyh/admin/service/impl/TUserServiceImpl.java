@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lyh.admin.pojo.TUser;
 import com.lyh.admin.mapper.TUserMapper;
+import com.lyh.admin.pojo.TUserRole;
 import com.lyh.admin.query.UserQuery;
+import com.lyh.admin.service.ITUserRoleService;
 import com.lyh.admin.service.ITUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lyh.admin.utils.AssertUtil;
@@ -18,9 +20,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>
@@ -36,6 +36,8 @@ public class TUserServiceImpl extends ServiceImpl<TUserMapper, TUser> implements
     @Resource
     private PasswordEncoder passwordEncoder;
 
+    @Resource
+    private ITUserRoleService userRoleService;
 
 
     /**
@@ -122,6 +124,45 @@ public class TUserServiceImpl extends ServiceImpl<TUserMapper, TUser> implements
         user.setPassword(passwordEncoder.encode("123456"));
         user.setIsDel(0);
         AssertUtil.isTrue(!(this.save(user)),"用户信息添加失败!");
+        //重新查询用户记录
+        TUser temp = this.findTUserByUserName(user.getUsername());
+        /**
+         *给用户分配角色
+         */
+        relationUserRole(temp.getId(),user.getRoleIds());
+    }
+
+    private void  relationUserRole(Integer userId,String roleIds){
+        /**
+         * 核心表 t_user_role
+         * 添加时
+         *   如果角色记录存在 执行批量添加
+         * 更新时
+         *   如果用户存在原始的角色记录
+         *      如果存在 直接删除原来的角色记录 重新添加新的用户角色记录
+         *
+         *      如果不存在 直接执行添加即可
+         *
+         *      思路：
+         *        首先查询用户原始的分配角色
+         *            如果存在原始用户角色记录，直接删除（根据用户id），重新添加新的用户角色记录
+         *            如果不存在，直接执行批量添加
+         */
+        int count = userRoleService.count(new QueryWrapper<TUserRole>().eq("user_id",userId));
+        if (count > 0){
+            AssertUtil.isTrue(!(userRoleService.remove(new QueryWrapper<TUserRole>().eq("user_id",userId))),"用户角色分配失败！");
+        }
+        if (StringUtils.isNotBlank(roleIds)){
+
+            List<TUserRole> userRoles = new ArrayList<TUserRole>();
+            for (String s : roleIds.split(",")) {
+                 TUserRole userRole = new TUserRole();
+                 userRole.setUserId(userId);
+                 userRole.setRoleId(Integer.parseInt(s));
+                 userRoles.add(userRole);
+            }
+            AssertUtil.isTrue(!(userRoleService.saveBatch(userRoles)),"用户角色分配失败！");;
+        }
     }
 
     /**
@@ -134,6 +175,7 @@ public class TUserServiceImpl extends ServiceImpl<TUserMapper, TUser> implements
         AssertUtil.isTrue(StringUtils.isBlank(user.getUsername()),"用户名不能为空！");
         TUser temp = this.findTUserByUserName(user.getUsername());
         AssertUtil.isTrue(null != temp && !(temp.getId().equals(user.getId())),"用户名已存在！");
+        relationUserRole(user.getId(),user.getRoleIds());
         AssertUtil.isTrue(!(this.updateById(user)),"用户信息更新成功！");
     }
 
@@ -145,6 +187,10 @@ public class TUserServiceImpl extends ServiceImpl<TUserMapper, TUser> implements
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     public void deleteUser(Integer[] ids) {
         AssertUtil.isTrue(null == ids || ids.length == 0,"请选择待删除的记录id!");
+        int count = userRoleService.count(new QueryWrapper<TUserRole>().in("user_id", Arrays.asList(ids)));
+        if(count > 0){
+            AssertUtil.isTrue(!(userRoleService.remove(new QueryWrapper<TUserRole>().in("user_id", Arrays.asList(ids)))),"用户记录删除失败！");
+        }
         ArrayList<TUser> users = new ArrayList<>();
         for (Integer id : ids) {
             TUser temp = this.getById(id);
