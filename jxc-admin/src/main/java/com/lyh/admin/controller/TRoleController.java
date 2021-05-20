@@ -1,6 +1,9 @@
 package com.lyh.admin.controller;
 
 
+import com.lyh.admin.model.RespBean;
+import com.lyh.admin.pojo.TRole;
+import com.lyh.admin.pojo.TUser;
 import com.lyh.admin.query.RoleQuery;
 import com.lyh.admin.service.ITRoleService;
 import org.springframework.stereotype.Controller;
@@ -59,6 +62,30 @@ public class TRoleController {
             model.addAttribute("role",roleService.getById(id));
         }
         return "role/add_update";
+    }
+
+    /**
+     * 角色信息添加接口
+     * @param user
+     * @return
+     */
+    @RequestMapping("save")
+    @ResponseBody
+    public RespBean saveUser(TRole role){
+        roleService.saveRole(role);
+        return RespBean.success("角色信息添加成功!");
+    }
+
+    /**
+     * 角色信息更新接口
+     * @param user
+     * @return
+     */
+    @RequestMapping("update")
+    @ResponseBody
+    public RespBean updateRole(TRole role){
+        roleService.updateRole(role);
+        return RespBean.success("角色记录更新成功!");
     }
 
 }

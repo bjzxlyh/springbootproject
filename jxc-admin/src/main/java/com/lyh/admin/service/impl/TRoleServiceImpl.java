@@ -9,9 +9,12 @@ import com.lyh.admin.pojo.TUser;
 import com.lyh.admin.query.RoleQuery;
 import com.lyh.admin.service.ITRoleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lyh.admin.utils.AssertUtil;
 import com.lyh.admin.utils.PageResultUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +30,21 @@ import java.util.Map;
 @Service
 public class TRoleServiceImpl extends ServiceImpl<TRoleMapper, TRole> implements ITRoleService {
 
+    /**
+     * 查找角色名
+     * @param roleName
+     * @return
+     */
+    @Override
+    public TRole findRoleByRoleName(String roleName) {
+        return this.baseMapper.selectOne(new QueryWrapper<TRole>().eq("is_del",0).eq("name",roleName));
+    }
+
+    /**
+     * 分页查询角色
+     * @param roleQuery
+     * @return
+     */
     @Override
     public Map<String, Object> roleList(RoleQuery roleQuery) {
         IPage<TRole> page = new Page<TRole>(roleQuery.getPage(),roleQuery.getLimit());
@@ -38,5 +56,32 @@ public class TRoleServiceImpl extends ServiceImpl<TRoleMapper, TRole> implements
 
         page = this.baseMapper.selectPage(page,queryWrapper);
         return PageResultUtil.getResult(page.getTotal(),page.getRecords());
+    }
+
+    /**
+     * 添加角色
+     * @param role
+     */
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
+    public void saveRole(TRole role) {
+        AssertUtil.isTrue(StringUtils.isBlank(role.getName()),"请输入角色名!");
+        AssertUtil.isTrue(null != this.findRoleByRoleName(role.getName()),"角色名已存在！");
+        role.setIsDel(0);
+        AssertUtil.isTrue(!(this.save(role)),"角色添加失败!");
+    }
+
+    /**
+     * 更新角色
+     * @param role
+     */
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
+    public void updateRole(TRole role) {
+        AssertUtil.isTrue(StringUtils.isBlank(role.getName()),"请输入角色名!");
+        TRole temp = this.findRoleByRoleName(role.getName());
+        AssertUtil.isTrue(null != temp && !(temp.getId().equals(role.getId())),"角色名已存在！");
+        AssertUtil.isTrue(!(this.updateById(role)),"角色更新失败!");
     }
 }

@@ -24,8 +24,7 @@ public interface ITUserService extends IService<TUser> {
      * @param session
      * @return
      */
-//    TUser login(String username, String password);
-    //TUser login(String username, String password);
+
 
     /**
      * 根据用户名查询用户记录

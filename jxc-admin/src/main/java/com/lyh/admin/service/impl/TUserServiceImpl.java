@@ -36,21 +36,7 @@ public class TUserServiceImpl extends ServiceImpl<TUserMapper, TUser> implements
     @Resource
     private PasswordEncoder passwordEncoder;
 
-    /**
-     * 登录
-     * @param username
-     * @param password
-     * @return
-     */
-//    @Override
-//    public TUser login(String username, String password) {
-//        AssertUtil.isTrue(StringUtil.isEmpty(username),"用户名不能为空!");
-//        AssertUtil.isTrue(StringUtil.isEmpty(password),"密码不能为空!");
-//        TUser Tuser = this.findTUserByUserName(username);
-//        AssertUtil.isTrue(null==Tuser,"该用户记录不存在或已注销！");
-//        AssertUtil.isTrue(!(Tuser.getPassword().equals(password)),"密码错误！");
-//        return Tuser;
-//    }
+
 
     /**
      * findTUserByUserName
