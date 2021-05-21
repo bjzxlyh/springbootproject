@@ -102,15 +102,39 @@ public class TRoleController {
         return RespBean.success("角色信息删除成功！");
     }
 
+    /**
+     * 查询角色
+     * @param userId
+     * @return
+     */
     @RequestMapping("queryAllRoles")
     @ResponseBody
     public List<Map<String,Object>> queryAllRoles(Integer userId){
         return roleService.queryAllRoles(userId);
     }
 
+    /**
+     * 权限添加页面
+     * @param roleId
+     * @param model
+     * @return
+     */
     @RequestMapping("toAddGrantPage")
     public String toAddGrantPage(Integer roleId,Model model){
         model.addAttribute("roleId",roleId);
         return "role/grant";
+    }
+
+    /**
+     * 角色授权接口
+     * @param roleId
+     * @param mids
+     * @return
+     */
+    @RequestMapping("addGrant")
+    @ResponseBody
+    public RespBean addGrant(Integer roleId,Integer[] mids){
+        roleService.addGrant(roleId,mids);
+        return RespBean.success("角色记录授权成功！");
     }
 }

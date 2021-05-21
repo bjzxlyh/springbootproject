@@ -5,8 +5,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lyh.admin.pojo.TRole;
 import com.lyh.admin.mapper.TRoleMapper;
+import com.lyh.admin.pojo.TRoleMenu;
 import com.lyh.admin.pojo.TUser;
 import com.lyh.admin.query.RoleQuery;
+import com.lyh.admin.service.ITRoleMenuService;
 import com.lyh.admin.service.ITRoleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lyh.admin.utils.AssertUtil;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +35,8 @@ import java.util.Map;
 @Service
 public class TRoleServiceImpl extends ServiceImpl<TRoleMapper, TRole> implements ITRoleService {
 
+    @Resource
+    private ITRoleMenuService roleMenuService;
 
     /**
      * 查找角色名
@@ -101,5 +106,38 @@ public class TRoleServiceImpl extends ServiceImpl<TRoleMapper, TRole> implements
     @Override
     public List<Map<String, Object>> queryAllRoles(Integer userId) {
         return this.baseMapper.queryAllRoles(userId);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
+    public void addGrant(Integer roleId, Integer[] mids) {
+        /**
+         * 1.参数校验
+         *    roleId 非空
+         * 2.授权
+         *   2.1 第一次授权
+         *     批量添加即可
+         *   2.2 第2+次 授权
+         *     如果存在原始权限，此时删除原始权限，添加新的权限
+         *     如果不存在，直接批量添加即可
+         */
+
+        TRole role = this.getById(roleId);
+        AssertUtil.isTrue(null == role,"待授权的角色记录不存在！");
+        int count = roleMenuService.count(new QueryWrapper<TRoleMenu>().eq("role_id",roleId));
+        if (count > 0){
+            AssertUtil.isTrue(!(roleMenuService.remove(new QueryWrapper<TRoleMenu>().eq("role_id",roleId))),"角色授权失败！");
+        }
+
+        if (null != mids && mids.length > 0){
+            List<TRoleMenu> roleMenus = new ArrayList<TRoleMenu>();
+            for (Integer mid : mids) {
+                TRoleMenu roleMenu = new TRoleMenu();
+                roleMenu.setRoleId(roleId);
+                roleMenu.setMenuId(mid);
+                roleMenus.add(roleMenu);
+            }
+            AssertUtil.isTrue(!(roleMenuService.saveBatch(roleMenus)),"角色授权失败！");
+        }
     }
 }
