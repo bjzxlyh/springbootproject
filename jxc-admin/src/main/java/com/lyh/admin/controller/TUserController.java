@@ -37,31 +37,6 @@ public class TUserController {
     private ITUserService userService;
 
     /**
-     * 登录界面
-     * @param username
-     * @param password
-     * @param session
-     * @return
-     */
-//    @RequestMapping("login")
-//    @ResponseBody
-//    public RespBean login(String username, String password, HttpSession session){
-//
-//        //try {
-//            TUser user = userService.login(username,password);
-//            session.setAttribute("user",user);
-//            return RespBean.success("用户登录成功");
-////        } catch (ParamsException e) {
-////            e.printStackTrace();
-////            return RespBean.error(e.getMsg());
-////        }catch (Exception e){
-////            e.printStackTrace();
-////            return  RespBean.error("用户登录失败！");
-////        }
-//
-//    }
-
-    /**
      * 用户信息设置页面
      * @return
      */
@@ -80,16 +55,8 @@ public class TUserController {
     @RequestMapping("updateUserInfo")
     @ResponseBody
     public RespBean updateUserInfo(TUser user){
-        //try {
             userService.updateUserInfo(user);
             return RespBean.success("用户信息更新成功!");
-//        } catch (ParamsException e) {
-//            e.printStackTrace();
-//            return RespBean.error(e.getMsg());
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            return  RespBean.error("用户信息更新失败！");
-//        }
     }
 
     /**
@@ -112,16 +79,8 @@ public class TUserController {
      @RequestMapping("updateUserPassword")
      @ResponseBody
      public RespBean updateUserPassword(Principal principal, String oldPassword, String newPassword, String confirmPassword){
-         //try {
              userService.updateUserPassword(principal.getName(),oldPassword,newPassword,confirmPassword);
              return RespBean.success("密码修改成功!");
-//         } catch (ParamsException e) {
-//             e.printStackTrace();
-//             return RespBean.error(e.getMsg());
-//         }catch (Exception e){
-//             e.printStackTrace();
-//             return  RespBean.error("密码修改失败！");
-//         }
      }
 
     /**
@@ -129,12 +88,14 @@ public class TUserController {
      * @return
      */
      @RequestMapping("index")
+     @PreAuthorize("hasAnyAuthority('1010')")
      public String index(){
          return "user/user";
      }
 
     @RequestMapping("list")
     @ResponseBody
+    @PreAuthorize("hasAnyAuthority('101003')")
      public Map<String,Object> userList(UserQuery userQuery){
          return userService.userList(userQuery);
      }
@@ -188,6 +149,5 @@ public class TUserController {
         userService.deleteUser(ids);
         return RespBean.success("用户信息删除成功！");
     }
-
 
 }
