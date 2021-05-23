@@ -31,4 +31,6 @@ public interface ITMenuService extends IService<TMenu> {
     TMenu findMenuByGradeAndUrl(String url,Integer grade);
 
     void updateMenu(TMenu menu);
+
+    void deleteMenuById(Integer id);
 }

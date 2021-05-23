@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.lyh.admin.dto.TreeDto;
 import com.lyh.admin.pojo.TMenu;
 import com.lyh.admin.mapper.TMenuMapper;
+import com.lyh.admin.pojo.TRoleMenu;
 import com.lyh.admin.service.ITMenuService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lyh.admin.service.ITRoleMenuService;
@@ -145,6 +146,30 @@ public class TMenuServiceImpl extends ServiceImpl<TMenuMapper, TMenu> implements
         }
 
         AssertUtil.isTrue(!(this.updateById(menu)),"菜单记录更新失败！");
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
+    public void deleteMenuById(Integer id) {
+        /**
+         * 1.参数校验
+         *  记录必须存在
+         * 2.子菜单
+         *  如果存在子菜单 不允许直接删除上级菜单
+         * 3.角色菜单表关联
+         *  将关联的角色菜单记录一并删除
+         * 4.执行菜单记录删除
+         */
+        TMenu menu = this.findMenuById(id);
+        AssertUtil.isTrue(null == id || null == this.findMenuById(id),"待删除记录不存在!");
+        int count = this.count(new QueryWrapper<TMenu>().eq("is_del",0).eq("p_id",id));
+        AssertUtil.isTrue(count > 0,"存在子菜单，不允许删除!");
+        count = roleMenuService.count(new QueryWrapper<TRoleMenu>().eq("menu_id",id));
+        if(count > 0){
+            AssertUtil.isTrue(!(roleMenuService.remove(new QueryWrapper<TRoleMenu>().eq("menu_id",id))),"菜单删除失败！");
+        }
+        menu.setIsDel(1);
+        AssertUtil.isTrue(!(this.updateById(menu)),"菜单删除失败！");
     }
 
 

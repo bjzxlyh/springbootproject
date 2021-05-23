@@ -95,4 +95,16 @@ public class TMenuController {
         menuService.updateMenu(menu);
         return RespBean.success("菜单更新成功！");
     }
+
+    /**
+     * 菜单删除
+     * @param id
+     * @return
+     */
+    @RequestMapping("delete")
+    @ResponseBody
+    public RespBean deleteMenu(Integer id){
+        menuService.deleteMenuById(id);
+        return RespBean.success("菜单删除成功!");
+    }
 }
