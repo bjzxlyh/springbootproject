@@ -112,5 +112,40 @@ public class TMenuServiceImpl extends ServiceImpl<TMenuMapper, TMenu> implements
         return this.getOne(new QueryWrapper<TMenu>().eq("is_del",0).eq("url",url).eq("grade",grade));
     }
 
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
+    public void updateMenu(TMenu menu) {
+        /**
+         * 1.参数校验
+         *      菜单名 不能为空
+         *      待更新记录必须存在
+         *      菜单层级只支持三级
+         * 2.同一层级下
+         *      菜单名不可重复
+         * 3.权限码
+         *      全局唯一
+         *      非空
+         * 4.上级菜单
+         *      上级菜单必须存在
+         * 5.url判断
+         *      菜单属于二级菜单 url 不可重复
+         */
+        AssertUtil.isTrue(null == menu.getId() || null == this.findMenuById(menu.getId()),"待更新的记录不存在！");
+        AssertUtil.isTrue(StringUtils.isBlank(menu.getName()),"菜单名不能为空!");
+        Integer grade = menu.getGrade();
+        AssertUtil.isTrue(null == grade || !(grade == 0 || grade == 1 || grade == 2),"菜单层级不合法！");
+        TMenu temp = this.findMenuByNameAndGrade(menu.getName(),menu.getGrade());
+        AssertUtil.isTrue(null != temp && !(temp.getId().equals(menu.getId())),"该层级下菜单已存在!");
+        temp = this.findMenuByAclVaLUE(menu.getAclValue());
+        AssertUtil.isTrue(null != temp && !(temp.getId().equals(menu.getId())),"权限码已存在！");
+        AssertUtil.isTrue(null == menu.getPId() || null == this.findMenuById(menu.getPId()),"请指定上级菜单！");
+        if (grade == 1){
+            temp = this.findMenuByGradeAndUrl(menu.getUrl(),menu.getGrade());
+            AssertUtil.isTrue(null != temp && !(temp.getId().equals(menu.getId())),"该层级下url不可重复！");
+        }
+
+        AssertUtil.isTrue(!(this.updateById(menu)),"菜单记录更新失败！");
+    }
+
 
 }

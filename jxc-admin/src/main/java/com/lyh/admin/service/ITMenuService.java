@@ -17,8 +17,6 @@ import java.util.Map;
  */
 public interface ITMenuService extends IService<TMenu> {
 
-
-
     List<TreeDto> queryAllMenus(Integer roleId);
 
     Map<String, Object> menuList();
@@ -31,4 +29,6 @@ public interface ITMenuService extends IService<TMenu> {
 
     TMenu findMenuById(Integer id);
     TMenu findMenuByGradeAndUrl(String url,Integer grade);
+
+    void updateMenu(TMenu menu);
 }

@@ -88,4 +88,11 @@ public class TMenuController {
         model.addAttribute("menu",menuService.getById(id));
         return "menu/update";
     }
+
+    @RequestMapping("update")
+    @ResponseBody
+    public RespBean updateMenu(TMenu menu){
+        menuService.updateMenu(menu);
+        return RespBean.success("菜单更新成功！");
+    }
 }
