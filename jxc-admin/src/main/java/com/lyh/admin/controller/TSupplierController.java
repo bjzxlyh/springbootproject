@@ -1,6 +1,7 @@
 package com.lyh.admin.controller;
 
 
+import com.lyh.admin.model.RespBean;
 import com.lyh.admin.pojo.TSupplier;
 import com.lyh.admin.query.SupplierQuery;
 import com.lyh.admin.query.UserQuery;
@@ -55,6 +56,30 @@ public class TSupplierController {
             model.addAttribute("supplier",supplierService.getById(id));
         }
         return "supplier/add_update";
+    }
+
+    /**
+     * 添加供应商
+     * @param supplier
+     * @return
+     */
+    @RequestMapping("save")
+    @ResponseBody
+    public RespBean saveSupplier(TSupplier supplier){
+        supplierService.saveSupplier(supplier);
+        return RespBean.success("供应商记录添加成功！");
+    }
+
+    /**
+     * 更新供应商
+     * @param supplier
+     * @return
+     */
+    @RequestMapping("update")
+    @ResponseBody
+    public RespBean updateSupplier(TSupplier supplier){
+        supplierService.updateSupplier(supplier);
+        return RespBean.success("供应商记录更新成功！");
     }
 
 }

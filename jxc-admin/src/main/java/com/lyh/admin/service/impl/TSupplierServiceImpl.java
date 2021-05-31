@@ -9,6 +9,7 @@ import com.lyh.admin.mapper.TSupplierMapper;
 import com.lyh.admin.query.SupplierQuery;
 import com.lyh.admin.service.ITSupplierService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lyh.admin.utils.AssertUtil;
 import com.lyh.admin.utils.PageResultUtil;
 import org.springframework.stereotype.Service;
 
@@ -34,5 +35,45 @@ public class TSupplierServiceImpl extends ServiceImpl<TSupplierMapper, TSupplier
         }
         page = this.baseMapper.selectPage(page,queryWrapper);
         return PageResultUtil.getResult(page.getTotal(),page.getRecords());
+    }
+
+    @Override
+    public TSupplier findSupplierByName(String name) {
+        return this.getOne(new QueryWrapper<TSupplier>().eq("is_del",0).eq("name",name));
+    }
+
+    @Override
+    public void saveSupplier(TSupplier supplier) {
+        /**
+         * 供应商名称非空 联系人 联系电话
+         * 名称不可重复
+         * isDel 0
+         *
+         */
+        checkParams(supplier.getName(),supplier.getContact(),supplier.getNumber());
+        AssertUtil.isTrue(null != this.findSupplierByName(supplier.getName()),"供应商已存在！");
+        supplier.setIsDel(0);
+        AssertUtil.isTrue(!(this.save(supplier)),"记录添加失败！");
+    }
+
+    @Override
+    public void updateSupplier(TSupplier supplier) {
+        AssertUtil.isTrue(null == this.getById(supplier.getId()),"请选择供应商记录！");
+        checkParams(supplier.getName(),supplier.getContact(),supplier.getNumber());
+        TSupplier temp = this.findSupplierByName(supplier.getName());
+        AssertUtil.isTrue(null != temp && !(temp.getId().equals(supplier.getId())),"供应商已存在！");
+        AssertUtil.isTrue(!(this.updateById(supplier)),"记录更新失败！");
+    }
+
+    /**
+     * 检查供应商名称联系人 联系电话 非空
+     * @param name
+     * @param contact
+     * @param number
+     */
+    private void checkParams(String name,String contact,String number){
+        AssertUtil.isTrue(StringUtils.isBlank(name),"请输入供应商名称!");
+        AssertUtil.isTrue(StringUtils.isBlank(contact),"请输入联系人!");
+        AssertUtil.isTrue(StringUtils.isBlank(number),"请输入联系电话!");
     }
 }

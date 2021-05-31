@@ -17,4 +17,9 @@ import java.util.Map;
 public interface ITSupplierService extends IService<TSupplier> {
 
     Map<String, Object> supplierList(SupplierQuery supplierQuery);
+    TSupplier findSupplierByName(String name);
+
+    void saveSupplier(TSupplier supplier);
+
+    void updateSupplier(TSupplier supplier);
 }
