@@ -2,17 +2,17 @@ layui.use(['table','layer'],function(){
        var layer = parent.layer === undefined ? layui.layer : top.layer,
         $ = layui.jquery,
         table = layui.table;
-    //角色列表展示
+    //客户列表展示
     var  tableIns = table.render({
-        elem: '#supplierList',
-        url : ctx+'/supplier/list',
+        elem: '#customerList',
+        url : ctx+'/customer/list',
         cellMinWidth : 95,
         page : true,
         height : "full-125",
         limits : [10,15,20,25],
         limit : 10,
         toolbar: "#toolbarDemo",
-        id : "supplierListTable",
+        id : "customerListTable",
         cols : [[
             {type: "checkbox", fixed:"left", width:50},
             {field: "id", title:'编号',fixed:"true", width:80},
@@ -26,27 +26,26 @@ layui.use(['table','layer'],function(){
 
     // 多条件搜索
     $(".search_btn").on("click",function(){
-        table.reload("supplierListTable",{
+        table.reload("customerListTable",{
             page: {
                 curr: 1 //重新从第 1 页开始
             },
             where: {
-                supplierName: $("input[name='supplierName']").val()
+                customerName: $("input[name='customerName']").val()
             }
         })
     });
 
 
     //头工具栏事件
-    table.on('toolbar(suppliers)', function(obj){
+    table.on('toolbar(customers)', function(obj){
         var checkStatus = table.checkStatus(obj.config.id);
         switch(obj.event){
             case "add":
-                openAddOrUpdateSupplierDialog();
+                openAddOrUpdateCustomerDialog();
                 break;
             case "del":
-                delSupplier(checkStatus.data);
-
+                delCustomer(checkStatus.data);
         };
     });
 
@@ -54,13 +53,13 @@ layui.use(['table','layer'],function(){
     /**
      * 行监听
      */
-    table.on("tool(suppliers)", function(obj){
+    table.on("tool(customers)", function(obj){
         var layEvent = obj.event;
         if(layEvent === "edit") {
-            openAddOrUpdateSupplierDialog(obj.data.id);
+            openAddOrUpdateCustomerDialog(obj.data.id);
         }else if(layEvent === "del") {
-            layer.confirm('确定删除当前供应商？', {icon: 3, title: "供应商管理"}, function (index) {
-                $.post(ctx+"/supplier/delete",{ids:obj.data.id},function (data) {
+            layer.confirm('确定删除当前客户？', {icon: 3, title: "客户管理"}, function (index) {
+                $.post(ctx+"/customer/delete",{ids:obj.data.id},function (data) {
                         if(data.code==200){
                             layer.msg("操作成功！");
                             tableIns.reload();
@@ -73,15 +72,13 @@ layui.use(['table','layer'],function(){
     });
 
 
-
-
     // 打开添加页面
-    function openAddOrUpdateSupplierDialog(uid){
-        var url  =  ctx+"/supplier/addOrUpdateSupplierPage";
-        var title="供应商管理-添加供应商";
+    function openAddOrUpdateCustomerDialog(uid){
+        var url  =  ctx+"/customer/addOrUpdateCustomerPage";
+        var title="客户管理-添加客户";
         if(uid){
             url = url+"?id="+uid;
-            title="供应商管理-更新供应商";
+            title="客户管理-更新客户";
         }
         layui.layer.open({
             title : title,
@@ -98,13 +95,13 @@ layui.use(['table','layer'],function(){
      * 批量删除
      * @param datas
      */
-    function delSupplier(datas) {
+    function delCustomer(datas) {
         if(datas.length==0){
             layer.msg("请选择删除记录!", {icon: 5});
             return;
         }
 
-        layer.confirm('确定删除选中的供应商记录？', {
+        layer.confirm('确定删除选中的客户记录？', {
             btn: ['确定','取消'] //按钮
         }, function(index){
             layer.close(index);
@@ -118,7 +115,7 @@ layui.use(['table','layer'],function(){
             }
             $.ajax({
                 type:"post",
-                url:ctx+"/supplier/delete",
+                url:ctx+"/customer/delete",
                 data:ids,
                 dataType:"json",
                 success:function (data) {

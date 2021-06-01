@@ -1,0 +1,52 @@
+package com.lyh.admin.pojo;
+
+import java.io.Serializable;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+/**
+ * <p>
+ * 供应商表
+ * </p>
+ *
+ * @author 李毅恒
+ * @since 2021-05-23
+ */
+@Data
+@EqualsAndHashCode(callSuper = false)
+@ApiModel(value="TSupplier对象", description="供应商表")
+@TableName("t_supplier")
+public class TSupplier implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @ApiModelProperty(value = "主键")
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
+
+    @ApiModelProperty(value = "联系地址")
+    private String address;
+
+    @ApiModelProperty(value = "联系人")
+    private String contact;
+
+    @ApiModelProperty(value = "供应商名称")
+    private String name;
+
+    @ApiModelProperty(value = "联系电话")
+    private String number;
+
+    @ApiModelProperty(value = "备注")
+    private String remarks;
+
+    @ApiModelProperty(value = "是否删除")
+    private Integer isDel;
+
+
+}
