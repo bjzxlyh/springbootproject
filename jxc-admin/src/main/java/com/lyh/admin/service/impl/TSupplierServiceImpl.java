@@ -12,7 +12,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lyh.admin.utils.AssertUtil;
 import com.lyh.admin.utils.PageResultUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -43,6 +47,7 @@ public class TSupplierServiceImpl extends ServiceImpl<TSupplierMapper, TSupplier
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     public void saveSupplier(TSupplier supplier) {
         /**
          * 供应商名称非空 联系人 联系电话
@@ -57,12 +62,26 @@ public class TSupplierServiceImpl extends ServiceImpl<TSupplierMapper, TSupplier
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     public void updateSupplier(TSupplier supplier) {
         AssertUtil.isTrue(null == this.getById(supplier.getId()),"请选择供应商记录！");
         checkParams(supplier.getName(),supplier.getContact(),supplier.getNumber());
         TSupplier temp = this.findSupplierByName(supplier.getName());
         AssertUtil.isTrue(null != temp && !(temp.getId().equals(supplier.getId())),"供应商已存在！");
         AssertUtil.isTrue(!(this.updateById(supplier)),"记录更新失败！");
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
+    public void deleteSupplier(Integer[] ids) {
+        AssertUtil.isTrue(null == ids || ids.length == 0,"请选择待删除的id");
+        List<TSupplier> supplierList = new ArrayList<TSupplier>();
+        for (Integer id : ids) {
+            TSupplier temp = this.getById(id);
+            temp.setIsDel(1);
+            supplierList.add(temp);
+        }
+        AssertUtil.isTrue(!(this.updateBatchById(supplierList)),"记录删除失败！");
     }
 
     /**

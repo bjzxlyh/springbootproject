@@ -22,4 +22,6 @@ public interface ITSupplierService extends IService<TSupplier> {
     void saveSupplier(TSupplier supplier);
 
     void updateSupplier(TSupplier supplier);
+
+    void deleteSupplier(Integer[] ids);
 }

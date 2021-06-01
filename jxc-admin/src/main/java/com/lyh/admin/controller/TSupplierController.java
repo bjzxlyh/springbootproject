@@ -82,4 +82,10 @@ public class TSupplierController {
         return RespBean.success("供应商记录更新成功！");
     }
 
+    @RequestMapping("delete")
+    @ResponseBody
+    public RespBean deleteSupplier(Integer[] ids){
+        supplierService.deleteSupplier(ids);
+        return RespBean.success("供应商记录删除成功！");
+    }
 }

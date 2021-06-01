@@ -72,6 +72,8 @@ layui.use(['table','layer'],function(){
     });
 
 
+
+
     // 打开添加页面
     function openAddOrUpdateSupplierDialog(uid){
         var url  =  ctx+"/supplier/addOrUpdateSupplierPage";
