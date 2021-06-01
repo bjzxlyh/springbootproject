@@ -2,6 +2,9 @@ package com.lyh.admin.service;
 
 import com.lyh.admin.pojo.TGoods;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.lyh.admin.query.GoodsQuery;
+
+import java.util.Map;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ITGoodsService extends IService<TGoods> {
 
+    Map<String, Object> goodsList(GoodsQuery goodsQuery);
 }

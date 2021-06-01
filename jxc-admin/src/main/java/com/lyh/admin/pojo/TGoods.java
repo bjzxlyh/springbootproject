@@ -1,6 +1,10 @@
 package com.lyh.admin.pojo;
 
 import java.io.Serializable;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -17,9 +21,14 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value="TGoods对象", description="商品表")
+@TableName("t_goods")
 public class TGoods implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    @ApiModelProperty(value = "主键")
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
 
     @ApiModelProperty(value = "商品编码")
     private String code;
