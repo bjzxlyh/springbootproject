@@ -124,6 +124,7 @@ layui.use(['table','layer'],function(){
                 success:function (data) {
                     if(data.code==200){
                         tableIns.reload();
+
                     }else{
                         layer.msg(data.message, {icon: 5});
                     }

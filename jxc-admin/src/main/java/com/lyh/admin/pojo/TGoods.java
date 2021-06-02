@@ -3,6 +3,7 @@ package com.lyh.admin.pojo;
 import java.io.Serializable;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
@@ -71,6 +72,14 @@ public class TGoods implements Serializable {
 
     @ApiModelProperty(value = "是否删除")
     private Integer isDel;
+
+    @ApiModelProperty(value = "单位名称")
+    @TableField(exist = false)
+    private String unitName;
+
+    @ApiModelProperty(value = "类别名称")
+    @TableField(exist = false)
+    private String typeName;
 
 
 }
